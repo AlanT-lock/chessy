@@ -28,7 +28,7 @@ export function EloChart({ data, timeControls }: Props) {
         <YAxis tick={{ fontSize: 11 }} domain={['auto', 'auto']} />
         <Tooltip
           labelFormatter={d => new Date(d).toLocaleDateString('fr-FR')}
-          formatter={(v: number, name: string) => [`${v}`, name.charAt(0).toUpperCase() + name.slice(1)]}
+          formatter={(v, name) => [`${v}`, String(name).charAt(0).toUpperCase() + String(name).slice(1)]}
         />
         <Legend />
         {timeControls.map(tc => (

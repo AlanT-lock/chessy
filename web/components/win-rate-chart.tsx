@@ -40,9 +40,9 @@ export function WinRateChart({ wins, draws, losses }: Props) {
             ))}
           </Pie>
           <Tooltip
-            formatter={(value: number, name: string) => [
-              `${value} (${Math.round((value / total) * 100)}%)`,
-              LABELS[name as keyof typeof LABELS],
+            formatter={(value, name) => [
+              `${value} (${Math.round((Number(value) / total) * 100)}%)`,
+              LABELS[String(name) as keyof typeof LABELS],
             ]}
           />
         </PieChart>
