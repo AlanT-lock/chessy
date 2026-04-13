@@ -4,43 +4,26 @@ export class MoveObserver {
   private retryTimer: ReturnType<typeof setInterval> | null = null
 
   observe(onMove: (san: string) => void) {
-    // chess.com uses multiple possible selectors for the move list
-    const findTarget = () =>
-      document.querySelector('.play-controller-scrollable') ??
-      document.querySelector('[class*="move-list"]') ??
-      document.querySelector('.sidebar-tabset') ??
-      document.body
+    console.log('[Chess Improvement] MoveObserver starting...')
 
     const extractMoves = (): string[] => {
-      // chess.com renders moves as elements with class "node" or "move-text-component"
-      const moveNodes = document.querySelectorAll(
-        '.move-text-component, .node .move-text, [data-ply]'
-      )
-
-      if (moveNodes.length > 0) {
-        return Array.from(moveNodes).map(el => el.textContent?.trim() ?? '').filter(Boolean)
+      // chess.com uses .main-line-ply for each move node
+      const nodes = document.querySelectorAll('.main-line-ply')
+      if (nodes.length > 0) {
+        return Array.from(nodes).map(el => el.textContent?.trim() ?? '').filter(Boolean)
       }
-
-      // Fallback: look for move nodes in the vertical move list
-      const verticalMoves = document.querySelectorAll(
-        '.vertical-move-list .move .move-text, .move-list .move-node'
-      )
-      if (verticalMoves.length > 0) {
-        return Array.from(verticalMoves).map(el => el.textContent?.trim() ?? '').filter(Boolean)
-      }
-
       return []
     }
 
     const checkForNewMoves = () => {
       const moves = extractMoves()
       if (moves.length > this.lastMoveCount) {
-        // Process all new moves (there might be more than one if we missed some)
         for (let i = this.lastMoveCount; i < moves.length; i++) {
-          const san = moves[i]
-          // Clean up the SAN: remove move numbers, dots, annotations
-          const cleaned = san.replace(/^\d+\.+\s*/, '').replace(/[?!+#]+$/, '').trim()
+          const raw = moves[i]
+          // Clean: remove move numbers, dots, check/mate symbols, annotations
+          const cleaned = raw.replace(/^\d+\.+\s*/, '').replace(/[?!]+$/g, '').trim()
           if (cleaned && /^[a-hKQRBNO0-9x=]/.test(cleaned)) {
+            console.log(`[Chess Improvement] Move #${i + 1}: "${cleaned}"`)
             onMove(cleaned)
           }
         }
@@ -48,11 +31,11 @@ export class MoveObserver {
       }
     }
 
-    const target = findTarget()
+    // Watch entire body for DOM changes (chess.com React re-renders)
     this.observer = new MutationObserver(() => checkForNewMoves())
-    this.observer.observe(target, { childList: true, subtree: true, characterData: true })
+    this.observer.observe(document.body, { childList: true, subtree: true })
 
-    // Also poll every 500ms as a fallback (chess.com uses complex React rendering)
+    // Poll every 500ms as fallback
     this.retryTimer = setInterval(() => checkForNewMoves(), 500)
   }
 
