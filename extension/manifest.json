@@ -4,5 +4,22 @@
   "version": "0.1.0",
   "description": "Analyse tes coups en temps réel sur chess.com",
   "permissions": ["storage"],
-  "host_permissions": ["https://www.chess.com/*"]
+  "host_permissions": ["https://www.chess.com/*"],
+  "background": {
+    "service_worker": "src/background/service-worker.ts",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.chess.com/game/computer/*"],
+      "js": ["src/content/index.ts"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["stockfish.js", "stockfish.wasm"],
+      "matches": ["https://www.chess.com/*"]
+    }
+  ]
 }
