@@ -22,11 +22,17 @@ export async function POST(
     .limit(1)
     .maybeSingle()
 
+  const { count: repetitions } = await supabase
+    .from('puzzle_attempts')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+    .eq('puzzle_id', puzzleId)
+
   const sm2 = calculateNextReview({
     success,
     intervalDays: last?.interval_days ?? 1,
     easeFactor: last?.ease_factor ?? 2.5,
-    repetitions: last ? 1 : 0,
+    repetitions: repetitions ?? 0,
   })
 
   await supabase.from('puzzle_attempts').insert({

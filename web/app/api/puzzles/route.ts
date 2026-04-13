@@ -29,7 +29,7 @@ export async function GET(_req: NextRequest) {
   const ids = (attempted ?? []).map((a: any) => a.puzzle_id)
 
   let query = supabase.from('puzzles').select('*').eq('user_id', user.id).limit(1)
-  if (ids.length) query = query.not('id', 'in', `(${ids.join(',')})`)
+  if (ids.length) query = query.not('id', 'in', `(${ids.map((id: string) => `'${id}'`).join(',')})`)
 
   const { data: puzzle } = await query.maybeSingle()
   if (!puzzle) return NextResponse.json(null, { status: 204 })
