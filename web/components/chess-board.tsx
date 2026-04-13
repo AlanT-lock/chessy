@@ -1,23 +1,29 @@
 'use client'
 import { Chessboard } from 'react-chessboard'
+import type { Arrow } from 'react-chessboard/dist/types'
 
 interface Props {
   fen: string
+  orientation?: 'white' | 'black'
+  arrows?: Arrow[]
   onSquareClick?: (square: string) => void
   highlightSquares?: Record<string, React.CSSProperties>
 }
 
-export function ChessBoard({ fen, onSquareClick, highlightSquares }: Props) {
+export function ChessBoard({ fen, orientation = 'white', arrows = [], onSquareClick, highlightSquares }: Props) {
   return (
     <Chessboard
       options={{
         position: fen,
+        boardOrientation: orientation,
+        arrows,
+        allowDrawingArrows: false,
+        allowDragging: false,
         onSquareClick: onSquareClick
-          ? ({ piece, square }: { piece: { pieceType: string } | null; square: string }) => onSquareClick(square)
+          ? ({ square }: { piece: any; square: string }) => onSquareClick(square)
           : undefined,
         squareStyles: highlightSquares,
-        allowDrawingArrows: false,
-        boardStyle: { width: '400px', maxWidth: '100%' },
+        boardStyle: { width: '100%', maxWidth: '500px' },
       }}
     />
   )
