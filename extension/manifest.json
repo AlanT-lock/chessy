@@ -3,7 +3,7 @@
   "name": "Chess Improvement",
   "version": "0.1.0",
   "description": "Analyse tes coups en temps réel sur chess.com",
-  "permissions": ["storage"],
+  "permissions": ["storage", "offscreen"],
   "host_permissions": ["https://www.chess.com/*"],
   "background": {
     "service_worker": "src/background/service-worker.ts",
