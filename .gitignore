@@ -4,4 +4,3 @@ node_modules
 dist
 .next
 *.wasm
-!extension/public/stockfish.wasm
