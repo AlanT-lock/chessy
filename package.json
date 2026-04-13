@@ -1,0 +1,5 @@
+{
+  "name": "chess-improvement",
+  "private": true,
+  "workspaces": ["extension", "web"]
+}
