@@ -11,6 +11,17 @@ export default async function DashboardPage() {
     redirect('/login')
   }
 
+  // Check if user has set their chess.com username
+  const { data: profile } = await supabase
+    .from('users')
+    .select('chess_com_username')
+    .eq('id', user.id)
+    .single()
+
+  if (!profile?.chess_com_username) {
+    redirect('/onboarding')
+  }
+
   const { data: games } = await supabase
     .from('games')
     .select('id, accuracy_score, played_at, result')

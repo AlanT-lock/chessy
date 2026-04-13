@@ -10,7 +10,8 @@ export default function TrainingPage() {
   const load = useCallback(async () => {
     setPuzzle(null)
     const res = await fetch('/api/puzzles')
-    if (res.status === 204) { setEmpty(true); return }
+    if (res.status === 401) { window.location.href = '/login'; return }
+    if (res.status === 204 || !res.ok) { setEmpty(true); return }
     setPuzzle(await res.json())
   }, [])
 
