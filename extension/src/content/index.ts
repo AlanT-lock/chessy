@@ -11,8 +11,8 @@ if (!isComputerGame()) {
   const observer = new MoveObserver()
   const overlay = createOverlay()
 
-  observer.observe(async (uci) => {
-    tracker.applyMove(uci)
+  observer.observe(async (san) => {
+    if (!tracker.applySan(san)) return
     const response: AnalysisResponse = await chrome.runtime.sendMessage({
       type: 'ANALYZE',
       fen: tracker.fen(),
