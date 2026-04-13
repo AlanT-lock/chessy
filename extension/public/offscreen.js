@@ -6,22 +6,27 @@ function getStockfish() {
   return new Promise((resolve) => {
     if (stockfish && ready) { resolve(stockfish); return }
 
+    console.log('[Offscreen] Creating Stockfish Worker...')
     stockfish = new Worker('stockfish.js')
+
     const initHandler = (e) => {
       const line = String(e.data)
+      console.log('[Offscreen] Stockfish init:', line)
       if (line.includes('readyok')) {
         ready = true
         stockfish.removeEventListener('message', initHandler)
+        console.log('[Offscreen] Stockfish ready!')
         resolve(stockfish)
       }
     }
     stockfish.addEventListener('message', initHandler)
-    stockfish.onerror = (e) => console.error('[Offscreen] Stockfish error:', e)
+    stockfish.onerror = (e) => console.error('[Offscreen] Stockfish Worker error:', e)
     stockfish.postMessage('uci')
     stockfish.postMessage('isready')
 
     setTimeout(() => {
       if (!ready) {
+        console.warn('[Offscreen] Stockfish init timeout')
         ready = true
         stockfish.removeEventListener('message', initHandler)
         resolve(stockfish)
@@ -31,7 +36,10 @@ function getStockfish() {
 }
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  if (msg.type !== 'ANALYZE') return
+  // Only handle messages forwarded from service worker
+  if (msg.type !== 'ANALYZE' || !msg._fromSW) return false
+
+  console.log('[Offscreen] Received ANALYZE request')
 
   getStockfish().then(sf => {
     const moves = []
@@ -60,16 +68,20 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       }
       if (line.startsWith('bestmove')) {
         sf.removeEventListener('message', handler)
-        sendResponse({
+        const result = {
           type: 'ANALYSIS_RESULT',
           bestMoves: moves.filter(Boolean).slice(0, 3),
           evaluation: topEval,
-        })
+        }
+        console.log('[Offscreen] Analysis done:', result.bestMoves.length, 'moves, eval:', topEval)
+        sendResponse(result)
       }
     }
 
     sf.addEventListener('message', handler)
   })
 
-  return true // keep channel open for async response
+  return true // keep channel open
 })
+
+console.log('[Offscreen] Document loaded, waiting for messages')
