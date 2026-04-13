@@ -8,11 +8,7 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    const { data } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/callback` },
-    })
-    redirect(data.url ?? '/')
+    redirect('/login')
   }
 
   const { data: games } = await supabase
