@@ -30,7 +30,7 @@ if (!isComputerGame()) {
     const { authToken } = await chrome.storage.local.get('authToken')
     if (!authToken) return
 
-    fetch('https://REPLACE_WITH_VERCEL_URL/api/games', {
+    fetch('https://chessy-eta.vercel.app/api/games', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${authToken}` },
       body: JSON.stringify({ pgn: tracker.pgn(), result }),
