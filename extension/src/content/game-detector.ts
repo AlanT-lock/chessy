@@ -1,4 +1,4 @@
-export const isComputerGame = () => /\/game\/computer\//.test(location.pathname)
+export const isComputerGame = () => /\/(play\/computer|play\/coach|practice)(\/|$)/.test(location.pathname)
 
 export function getGameResult(): 'win' | 'loss' | 'draw' | null {
   const el = document.querySelector('[class*="game-result"], .game-over-modal-content')

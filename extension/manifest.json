@@ -11,7 +11,14 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://www.chess.com/game/computer/*"],
+      "matches": [
+        "https://www.chess.com/play/computer/*",
+        "https://www.chess.com/play/computer",
+        "https://www.chess.com/play/coach/*",
+        "https://www.chess.com/play/coach",
+        "https://www.chess.com/practice/*",
+        "https://www.chess.com/practice"
+      ],
       "js": ["src/content/index.ts"],
       "run_at": "document_idle"
     }
