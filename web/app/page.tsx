@@ -1,4 +1,4 @@
-import { createServerSupabase } from '@/lib/supabase'
+import { createServerSupabase } from '@/lib/supabase-server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { AccuracyChart } from '@/components/accuracy-chart'

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerSupabase } from '@/lib/supabase'
+import { createServerSupabase } from '@/lib/supabase-server'
 
 export async function GET(_req: NextRequest) {
   const supabase = await createServerSupabase()

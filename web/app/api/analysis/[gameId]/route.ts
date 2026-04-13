@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerSupabase } from '@/lib/supabase'
+import { createServerSupabase } from '@/lib/supabase-server'
 import { analyzePgn } from '@/lib/lichess'
 
 export async function GET(
