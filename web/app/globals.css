@@ -24,3 +24,21 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Analysis page dark theme */
+.analysis-dark {
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+.analysis-dark .panel {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+}
+
+.analysis-dark .panel-inner {
+  padding: 16px;
+}
