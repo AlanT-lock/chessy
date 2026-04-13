@@ -31,7 +31,7 @@ function analyzePosition(fen: string, depth: number): Promise<AnalysisResponse> 
       const line = e.data
       if (line.startsWith('info depth') && line.includes('multipv') && line.includes('score cp')) {
         const cp = parseInt(line.match(/score cp (-?\d+)/)![1])
-        const move = line.match(/pv (\S+)/)![1]
+        const move = line.match(/ pv ([a-h][1-8][a-h][1-8]\w?)/)![1]
         const idx = parseInt(line.match(/multipv (\d)/)![1]) - 1
         if (idx === 0) topEval = cp
         moves[idx] = { move, evaluation: cp, classification: classifyDelta(idx === 0 ? 200 : cp - topEval) }
