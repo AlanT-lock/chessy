@@ -1,11 +1,22 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { Chess } from 'chess.js'
+import { Classification } from '@/lib/lichess'
 import { ChessBoard } from '@/components/chess-board'
 import { MoveList } from '@/components/move-list'
 
+interface GameData {
+  pgn: string
+  move_analysis: Array<{
+    moveNumber: number
+    movePlayed: string
+    classification: Classification
+    explanation: string | null
+  }>
+}
+
 export default function AnalysisPage({ params }: { params: Promise<{ gameId: string }> }) {
-  const [game, setGame] = useState<any>(null)
+  const [game, setGame] = useState<GameData | null>(null)
   const [fen, setFen] = useState('start')
   const [selected, setSelected] = useState(-1)
   const [gameId, setGameId] = useState<string | null>(null)

@@ -13,7 +13,7 @@ export function ChessBoard({ fen, onSquareClick, highlightSquares }: Props) {
       options={{
         position: fen,
         onSquareClick: onSquareClick
-          ? ({ square }: { piece: string | null; square: string }) => onSquareClick(square)
+          ? ({ piece, square }: { piece: { pieceType: string } | null; square: string }) => onSquareClick(square)
           : undefined,
         squareStyles: highlightSquares,
         allowDrawingArrows: false,
