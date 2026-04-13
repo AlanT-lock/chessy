@@ -1,6 +1,10 @@
 'use client'
 import { Chessboard } from 'react-chessboard'
-import type { Arrow } from 'react-chessboard/dist/types'
+interface Arrow {
+  startSquare: string
+  endSquare: string
+  color: string
+}
 
 interface Props {
   fen: string
